@@ -1,1 +1,35 @@
-// app global css
+@import "@fontsource/inter/index.css";
+@import "@fontsource/cormorant-garamond/index.css";
+
+:root {
+  --background: #F8F5FB;
+  --surface: #FFFFFF;
+
+  --card-radius: 22px;
+}
+
+html,
+body,
+#q-app {
+  background: var(--background);
+}
+
+body {
+  font-family:
+          "Inter",
+          sans-serif;
+}
+
+.q-page {
+  background: var(--background);
+}
+
+.q-card {
+  border-radius: var(--card-radius);
+}
+
+.page-container {
+  max-width: 430px;
+  margin: auto;
+  min-height: 100vh;
+}
