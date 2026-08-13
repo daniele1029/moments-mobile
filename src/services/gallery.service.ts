@@ -20,11 +20,11 @@ interface ApiResponse<T> {
 }
 
 class GalleryService {
-  async getGallery(cursor?: string) {
+  async getGallery(cursor?: string, type: "guest_photo" | "photo_booth"  = "guest_photo") {
     const response = await api.get<ApiResponse<GalleryPage>>(
         "/gallery",
         {
-          params: { limit: 20, cursor },
+          params: { limit: 20, cursor, type },
         },
       );
     return response.data.data;

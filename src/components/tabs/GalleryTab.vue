@@ -138,23 +138,56 @@
         </div>
       </section>
 
-      <div class="empty photobooth-empty">
+
+      <div
+        v-if="photobooth.loading"
+        class="loading"
+      >
+        <q-spinner
+          color="primary"
+          size="48px"
+        />
+      </div>
+      <GalleryGrid
+        v-else-if="photobooth.gallery.length > 0"
+        :photos="photobooth.gallery"
+      />
+
+      <div
+        v-else
+        class="empty"
+      >
         <div class="empty-icon">
           <q-icon
-            name="photo_camera"
+            name="photo_library"
             size="40px"
           />
         </div>
 
         <h2>
-          The booth is getting ready
+          Memories are on their way
         </h2>
 
         <p>
-          Your photobooth strips will
-          appear here once the fun begins.
+          Photos shared by your guests
+          will appear here.
         </p>
       </div>
+
+      <div
+        v-if="photobooth.loadingMore"
+        class="loading-more"
+      >
+        <q-spinner
+          color="primary"
+          size="24px"
+        />
+      </div>
+
+      <div
+        ref="sentinel"
+        class="gallery-sentinel"
+      />
     </template>
   </section>
 </template>
@@ -176,6 +209,10 @@ import {
 const gallery =
   useGalleryStore();
 
+const photobooth =
+  useGalleryStore("photo_booth");
+
+
 const activeCollection =
   ref<"guest" | "photobooth">(
     "guest",
@@ -194,24 +231,26 @@ onMounted(() => {
   if (gallery.gallery.length === 0) {
     void gallery.fetchGallery();
   }
+  if (photobooth.gallery.length === 0) {
+    void photobooth.fetchGallery();
+  }
 
   observer =
     new IntersectionObserver(
       (entries) => {
-        if (
-          activeCollection.value !== "guest"
-        ) {
-          return;
-        }
-
         const entry =
           entries.at(0);
 
         if (!entry?.isIntersecting) {
           return;
         }
-
-        void gallery.loadMore();
+        if (
+          activeCollection.value !== "guest"
+        ) {
+          void photobooth.loadMore();
+        } else {
+          void gallery.loadMore();
+        }
       },
       {
         root: null,

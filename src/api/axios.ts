@@ -5,11 +5,11 @@ import {
 } from "@/services/token.service";
 
 const apiUrl =
-  import.meta.env.VITE_API_URL;
+  import.meta.env.VITE_API_URL || import.meta.env.QCLI_API_URL;
 
 if (!apiUrl) {
   throw new Error(
-    "VITE_API_URL is missing.",
+    "VITE_API_URL or QCLI_API_URL is missing.",
   );
 }
 

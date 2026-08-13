@@ -5,9 +5,9 @@ import galleryService, {
   type GalleryPhoto,
 } from "@/services/gallery.service";
 
-export const useGalleryStore =
-  defineStore(
-    "gallery",
+export const useGalleryStore = (type: "guest_photo" | "photo_booth" = "guest_photo") => {
+  return defineStore(
+    `gallery_${type}`,
     () => {
 
       const gallery =
@@ -31,8 +31,9 @@ export const useGalleryStore =
 
         try {
           const page =
-            await galleryService.getGallery();
-
+            await galleryService.getGallery(undefined, type);
+          console.log(type, "Gallery page fetched:", page);
+            if (type === 'photo_booth') console.log("Gallery page fetched:", page);
           gallery.value =
             page.photos;
 
@@ -67,6 +68,7 @@ export const useGalleryStore =
           const page =
             await galleryService.getGallery(
               cursor,
+              type,
             );
 
           const loadedIds =
@@ -159,4 +161,5 @@ export const useGalleryStore =
       };
 
     },
-  );
+  )();
+}
